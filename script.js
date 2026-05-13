@@ -245,6 +245,24 @@ btnNext.addEventListener("click", () => {
 window.addEventListener("resize", updateCarousel);
 updateCarousel();
 
+const videoObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      const vid = entry.target;
+      if (entry.isIntersecting && vid.dataset.src && !vid.src) {
+        vid.src = vid.dataset.src;
+        vid.preload = "metadata";
+        vid.load();
+      }
+    });
+  },
+  { rootMargin: "200px" },
+);
+
+document
+  .querySelectorAll(".phone-frame video")
+  .forEach((v) => videoObserver.observe(v));
+
 document.querySelectorAll(".phone-frame video").forEach((video) => {
   video.addEventListener("mouseenter", () => video.play());
   video.addEventListener("mouseleave", () => {
